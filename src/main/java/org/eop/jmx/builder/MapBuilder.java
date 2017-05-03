@@ -1,12 +1,17 @@
 package org.eop.jmx.builder;
 
-import java.util.HashMap;
 import java.util.Map;
 
+import org.eop.jmx.builder.map.Context;
+import org.eop.jmx.builder.map.Context.ListType;
+import org.eop.jmx.builder.map.Context.MapType;
 import org.eop.jmx.builder.map.ICNode;
+import org.eop.jmx.builder.map.ItemList;
 import org.eop.jmx.builder.map.ItemMap;
+import org.eop.jmx.builder.map.ItemVal;
+import org.eop.jmx.builder.map.ItemVals;
+import org.eop.jmx.builder.map.KeyList;
 import org.eop.jmx.builder.map.KeyMap;
-import org.eop.jmx.builder.map.KeyMaps;
 import org.eop.jmx.builder.map.KeyVal;
 import org.eop.jmx.builder.map.KeyVals;
 import org.eop.jmx.builder.map.RootMap;
@@ -17,15 +22,18 @@ public class MapBuilder {
 
 	private ICNode root;
 	private ICNode currentNode;
+	private boolean useLinkedHashMap;
+	private boolean useLinkedList;
 	
 	public MapBuilder() {
-		
+		this(false, false);
 	}
 	
-	public MapBuilder root() {
-		root = new RootMap();
+	public MapBuilder(boolean useLinkedHashMap, boolean useLinkedList) {
+		this.useLinkedHashMap = useLinkedHashMap;
+		this.useLinkedList = useLinkedList;
+		root = new RootMap(null);
 		currentNode = root;
-		return this;
 	}
 	
 	public MapBuilder keyval(String key, Object val) {
@@ -45,10 +53,20 @@ public class MapBuilder {
 		return this;
 	}
 	
-	public MapBuilder keymaps(String key) {
-		KeyMaps keymaps = new KeyMaps(currentNode, key);
-		currentNode.addChild(keymaps);
-		currentNode = keymaps;
+	public MapBuilder keylist(String key) {
+		KeyList keylist = new KeyList(currentNode, key);
+		currentNode.addChild(keylist);
+		currentNode = keylist;
+		return this;
+	}
+	
+	public MapBuilder itemval(Object val) {
+		currentNode.addChild(new ItemVal(currentNode, val));
+		return this;
+	}
+	
+	public MapBuilder itemvals(Object... vals) {
+		currentNode.addChild(new ItemVals(currentNode, vals));
 		return this;
 	}
 	
@@ -59,16 +77,22 @@ public class MapBuilder {
 		return this;
 	}
 	
+	public MapBuilder itemlist() {
+		ItemList itemlist = new ItemList(currentNode);
+		currentNode.addChild(itemlist);
+		currentNode = itemlist;
+		return this;
+	}
+	
 	public MapBuilder end() {
 		currentNode = currentNode.getParent();
 		return this;
 	}
 	
 	public Map<String, Object> toMap() {
-		Map<String, Object> map = new HashMap<>();
-		root.toMap(map);
-		return map;
+		Context context = new Context(useLinkedHashMap ? MapType.LinkedHashMap : MapType.HashMap, useLinkedList ? ListType.LinkedList : ListType.ArrayList);
+		root.toMap(context);
+		return context.getMap();
 	}
 	
-
 }

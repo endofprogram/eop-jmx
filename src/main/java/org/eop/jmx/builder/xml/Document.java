@@ -9,7 +9,7 @@ public class Document extends XNode implements IDocument {
 	private IElement root;
 	
 	public Document() {
-		super(null, null);
+		super(null, "");
 	}
 	
 	@Override

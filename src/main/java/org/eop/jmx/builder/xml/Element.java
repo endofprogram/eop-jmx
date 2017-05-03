@@ -3,21 +3,20 @@ package org.eop.jmx.builder.xml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eop.chassis.util.EmptyUtil;
 /**
  * lixinjie 2016-12-26
  */
 public class Element extends CNode implements IElement {
 	
-	private boolean selfClose;
+	private boolean selfClosing;
 	private QName qname;
 	private List<Namespace> namespaces;
 	private List<Attribute> attributes;
 	
-	public Element(IXNode parent, String name, boolean selfClose, String namespace) {
+	public Element(IXNode parent, String namespace, String name, boolean selfClosing) {
 		super(parent, name);
-		this.selfClose = selfClose;
-		this.qname = new QName(this, name, namespace);
+		this.selfClosing = selfClosing;
+		this.qname = new QName(this, namespace, name);
 	}
 	
 	@Override
@@ -50,8 +49,8 @@ public class Element extends CNode implements IElement {
 		return qname;
 	}
 	
-	boolean getSelfClose() {
-		return selfClose;
+	boolean getSelfClosing() {
+		return selfClosing;
 	}
 	
 	@Override
@@ -74,7 +73,7 @@ public class Element extends CNode implements IElement {
 		}
 		
 		boolean hasChild = (getChildren() != null) && (!getChildren().isEmpty());
-		if (hasChild || !selfClose) {
+		if (hasChild || !selfClosing) {
 			sb.append('>');
 		} else {
 			sb.append("/>");
@@ -86,7 +85,7 @@ public class Element extends CNode implements IElement {
 			}
 		}
 		
-		if (hasChild || !selfClose) {
+		if (hasChild || !selfClosing) {
 			sb.append("</");
 			qname.toXml(sb);
 			sb.append('>');
@@ -114,13 +113,13 @@ public class Element extends CNode implements IElement {
 		}
 		
 		boolean hasChild = (getChildren() != null) && (!getChildren().isEmpty());
-		if (hasChild || !selfClose) {
+		if (hasChild || !selfClosing) {
 			sb.append('>');
 		} else {
 			sb.append("/>");
 		}
 		
-		if (!hasChild && selfClose) {
+		if (!hasChild && selfClosing) {
 			xmlCRLF(sb);
 		} else if (hasChild && !(getChildren().get(0) instanceof Text)) {
 			xmlCRLF(sb);
@@ -136,7 +135,7 @@ public class Element extends CNode implements IElement {
 			xmlIndent(sb, indent);
 		}
 		
-		if (hasChild || !selfClose) {
+		if (hasChild || !selfClosing) {
 			sb.append("</");
 			qname.toXml(sb);
 			sb.append('>');
@@ -146,13 +145,13 @@ public class Element extends CNode implements IElement {
 
 	@Override
 	public Element deepClone(IXNode parent) {
-		Element element = new Element(parent, getName(), selfClose, qname.getPrefix());
-		if (EmptyUtil.notEmpty(namespaces)) {
+		Element element = new Element(parent, qname.getPrefix(), getName(), selfClosing);
+		if (namespaces != null && !namespaces.isEmpty()) {
 			for (Namespace namespace : namespaces) {
 				element.addNamespace(namespace.deepClone(element));
 			}
 		}
-		if (EmptyUtil.notEmpty(attributes)) {
+		if (attributes != null && !attributes.isEmpty()) {
 			for (Attribute attribute : attributes) {
 				element.addAttribute(attribute.deepClone(element));
 			}

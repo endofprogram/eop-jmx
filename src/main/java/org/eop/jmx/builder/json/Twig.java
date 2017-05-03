@@ -46,6 +46,6 @@ public class Twig extends JNode {
 
 	@Override
 	public IJNode deepClone(IJNode parent) {
-		return new Twig(parent, getName(), values);
+		return new Twig(parent, values);
 	}
 }

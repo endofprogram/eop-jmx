@@ -1,6 +1,5 @@
 package org.eop.jmx.builder.map;
 
-import java.util.Map;
 /**
  * lixinjie 2016-12-26
  */
@@ -14,7 +13,7 @@ public class KeyVal extends MNode {
 	}
 
 	@Override
-	public void toMap(Map<String, Object> map) {
-		map.put(key, val);
+	public void toMap(Context context) {
+		context.add(key, val);
 	}
 }

@@ -1,9 +1,7 @@
 package org.eop.jmx.builder.map;
 
-import java.util.Map;
-
 /**
- * @author lixinjie
+ * lixinjie 2016-12-26
  */
 public interface IMNode {
 
@@ -11,5 +9,5 @@ public interface IMNode {
 	
 	public void setParent(ICNode parent);
 	
-	public void toMap(Map<String, Object> map);
+	public void toMap(Context context);
 }

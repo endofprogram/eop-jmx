@@ -6,7 +6,7 @@ public class QName extends XNode {
 
 	private String prefix;
 	
-	public QName(IXNode parent, String name, String prefix) {
+	public QName(IXNode parent, String prefix, String name) {
 		super(parent, name);
 		this.prefix = prefix;
 	}
@@ -35,7 +35,7 @@ public class QName extends XNode {
 
 	@Override
 	public QName deepClone(IXNode parent) {
-		return new QName(parent, getName(), prefix);
+		return new QName(parent, prefix, getName());
 	}
 
 }

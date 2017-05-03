@@ -7,10 +7,10 @@ public class Attribute extends XNode {
 	private QName qname;
 	private String value;
 	
-	public Attribute(IXNode parent, String name, String value, String prefix, char quote) {
+	public Attribute(IXNode parent, String prefix, String name, String value, char quote) {
 		super(parent, name, quote);
 		this.value = value;
-		this.qname = new QName(this, name, prefix);
+		this.qname = new QName(this, prefix, name);
 	}
 	
 	QName getQName() {
@@ -37,7 +37,7 @@ public class Attribute extends XNode {
 
 	@Override
 	public Attribute deepClone(IXNode parent) {
-		return new Attribute(parent, getName(), value, qname.getPrefix(), getQuote());
+		return new Attribute(parent, qname.getPrefix(), getName(), value, getQuote());
 	}
 
 }

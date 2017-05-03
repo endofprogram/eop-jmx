@@ -2,6 +2,7 @@ package org.eop.jmx.builder;
 
 import org.eop.jmx.builder.json.Bole;
 import org.eop.jmx.builder.json.Bough;
+import org.eop.jmx.builder.json.Bud;
 import org.eop.jmx.builder.json.Fork;
 import org.eop.jmx.builder.json.ICNode;
 import org.eop.jmx.builder.json.Leaf;
@@ -52,15 +53,13 @@ public class JsonBuilder {
 		return this;
 	}
 	
-	public JsonBuilder twig(Object... values) {
-		currentNode.addChild(new Twig(currentNode, values));
+	public JsonBuilder bud(Object value) {
+		currentNode.addChild(new Bud(currentNode, value));
 		return this;
 	}
 	
-	public JsonBuilder trunk() {
-		Trunk trunk = new Trunk(currentNode);
-		currentNode.addChild(trunk);
-		currentNode = trunk;
+	public JsonBuilder twig(Object... values) {
+		currentNode.addChild(new Twig(currentNode, values));
 		return this;
 	}
 	
@@ -68,6 +67,13 @@ public class JsonBuilder {
 		Bough bough = new Bough(currentNode);
 		currentNode.addChild(bough);
 		currentNode = bough;
+		return this;
+	}
+	
+	public JsonBuilder trunk() {
+		Trunk trunk = new Trunk(currentNode);
+		currentNode.addChild(trunk);
+		currentNode = trunk;
 		return this;
 	}
 	

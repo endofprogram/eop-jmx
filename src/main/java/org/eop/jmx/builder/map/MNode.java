@@ -1,6 +1,5 @@
 package org.eop.jmx.builder.map;
 
-import java.util.Map;
 /**
  * lixinjie 2016-12-26
  */
@@ -29,5 +28,5 @@ public abstract class MNode implements IMNode {
 	}
 	
 	@Override
-	public abstract void toMap(Map<String, Object> map);
+	public abstract void toMap(Context context);
 }

@@ -4,21 +4,21 @@ package org.eop.jmx.builder.xml;
  */
 public class CDatas extends CNode {
 
-	private Object[] texts;
+	private Object[] cdatas;
 	private String namespace;
 	
-	public CDatas(IXNode parent, String name, Object[] texts) {
-		this(parent, name, texts, null);
+	public CDatas(IXNode parent, String name, Object[] cdatas) {
+		this(parent, null, name, cdatas);
 	}
 	
-	public CDatas(IXNode parent, String name, Object[] texts, String namespace) {
+	public CDatas(IXNode parent, String namespace, String name, Object[] cdatas) {
 		super(parent, name);
-		this.texts = texts;
+		this.cdatas = cdatas;
 		this.namespace = namespace;
 	}
 
-	Object[] getTexts() {
-		return texts;
+	Object[] getCDatas() {
+		return cdatas;
 	}
 	
 	String getNamespace() {
@@ -42,15 +42,15 @@ public class CDatas extends CNode {
 	}
 
 	void prepare() {
-		for (Object text : texts) {
-			Element element = new Element(this, getName(), false, namespace);
-			element.addChild(new CData(element, text));
+		for (Object cdata : cdatas) {
+			Element element = new Element(this, namespace, getName(), false);
+			element.addChild(new CData(element, cdata));
 			addChild(element);
 		}
 	}
 
 	@Override
 	public IXNode deepClone(IXNode parent) {
-		return new CDatas(parent, getName(), texts, namespace);
+		return new CDatas(parent, namespace, getName(), cdatas);
 	}
 }

@@ -1,9 +1,8 @@
 package org.eop.jmx.builder.map;
 
 import java.util.List;
-
 /**
- * @author lixinjie
+ * lixinjie 2016-12-26
  */
 public interface ICNode extends IMNode {
 

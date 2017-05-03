@@ -8,7 +8,7 @@ public class Namespace extends XNode {
 	private String uri;
 	
 	public Namespace(IXNode parent, String prefix, String uri, char quote) {
-		super(parent, null, quote);
+		super(parent, "", quote);
 		this.prefix = prefix;
 		this.uri = uri;
 	}

@@ -4,17 +4,17 @@ import java.util.Arrays;
 /**
  * lixinjie 2016-12-26
  */
-public class KeyVals extends MNode {
+public class ItemVals extends MNode {
 
 	Object[] vals;
 	
-	public KeyVals(ICNode parent, String key, Object... vals) {
-		super(parent, key);
+	public ItemVals(ICNode parent, Object... vals) {
+		super(parent, "");
 		this.vals = vals;
 	}
 
 	@Override
 	public void toMap(Context context) {
-		context.add(key, Arrays.asList(vals));
+		context.add(Arrays.asList(vals));
 	}
 }

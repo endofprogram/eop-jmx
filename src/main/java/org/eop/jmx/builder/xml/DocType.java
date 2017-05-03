@@ -31,7 +31,7 @@ public class DocType extends XNode {
 	public void toXml(StringBuilder sb) {
 		sb.append("<!DOCTYPE ");
 		sb.append(getName());
-		if (publicID !=null && !publicID.isEmpty()) {
+		if (publicID != null && !publicID.isEmpty()) {
 			 sb.append(" PUBLIC ");
 	         sb.append(getQuote()).append(publicID).append(getQuote());
 		} else if (systemID != null && !systemID.isEmpty()) {
@@ -52,7 +52,7 @@ public class DocType extends XNode {
 	public void toXml(StringBuilder sb, int indent) {
 		sb.append("<!DOCTYPE ");
 		sb.append(getName());
-		if (publicID !=null && !publicID.isEmpty()) {
+		if (publicID != null && !publicID.isEmpty()) {
 			 sb.append(" PUBLIC ");
 	         sb.append(getQuote()).append(publicID).append(getQuote());
 		} else if (systemID != null && !systemID.isEmpty()) {

@@ -1,19 +1,18 @@
 package org.eop.jmx.builder.map;
-
 /**
  * lixinjie 2016-12-26
  */
-public class RootMap extends CNode {
+public class ItemVal extends MNode {
 
-	public RootMap(ICNode parent) {
-		super(parent, "");
-	}
+	Object val;
 	
+	public ItemVal(ICNode parent, Object val) {
+		super(parent, "");
+		this.val = val;
+	}
+
 	@Override
 	public void toMap(Context context) {
-		for (IMNode child : children) {
-			child.toMap(context);
-		}
+		context.add(val);
 	}
-
 }

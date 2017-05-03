@@ -8,10 +8,10 @@ public class Texts extends CNode {
 	private String namespace;
 	
 	public Texts(IXNode parent, String name, Object[] texts) {
-		this(parent, name, texts, null);
+		this(parent, null, name, texts);
 	}
 	
-	public Texts(IXNode parent, String name, Object[] texts, String namespace) {
+	public Texts(IXNode parent, String namespace, String name, Object[] texts) {
 		super(parent, name);
 		this.texts = texts;
 		this.namespace = namespace;
@@ -43,7 +43,7 @@ public class Texts extends CNode {
 
 	void prepare() {
 		for (Object text : texts) {
-			Element element = new Element(this, getName(), false, namespace);
+			Element element = new Element(this, namespace, getName(), false);
 			element.addChild(new Text(element, text));
 			addChild(element);
 		}
@@ -51,6 +51,6 @@ public class Texts extends CNode {
 
 	@Override
 	public Texts deepClone(IXNode parent) {
-		return new Texts(parent, getName(), texts, namespace);
+		return new Texts(parent, namespace, getName(), texts);
 	}
 }

@@ -4,21 +4,21 @@ package org.eop.jmx.builder.xml;
  */
 public class CData extends XNode {
 
-	private Object text;
+	private Object cdata;
 	
-	public CData(IXNode parent, Object text) {
+	public CData(IXNode parent, Object cdata) {
 		super(parent, null);
-		this.text = text;
+		this.cdata = cdata;
 	}
 	
-	Object getText() {
-		return text;
+	Object getCData() {
+		return cdata;
 	}
 	
 	@Override
 	public void toXml(StringBuilder sb) {
 		sb.append("<![CDATA[");
-		sb.append(text);
+		sb.append(cdata);
 		sb.append("]]>");
 	}
 
@@ -26,14 +26,14 @@ public class CData extends XNode {
 	public void toXml(StringBuilder sb, int indent) {
 		xmlIndent(sb, indent);
 		sb.append("<![CDATA[");
-		sb.append(text);
+		sb.append(cdata);
 		sb.append("]]>");
 		xmlCRLF(sb);
 	}
 
 	@Override
 	public CData deepClone(IXNode parent) {
-		return new CData(parent, text);
+		return new CData(parent, cdata);
 	}
 
 }
