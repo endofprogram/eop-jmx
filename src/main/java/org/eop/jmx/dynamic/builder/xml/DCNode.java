@@ -3,6 +3,8 @@ package org.eop.jmx.dynamic.builder.xml;
 import java.util.List;
 
 import org.eop.claw.Claw;
+import org.eop.jmx.builder.xml.ICNode;
+import org.eop.jmx.builder.xml.IXNode;
 /**
  * lixinjie 2016-12-26
  */

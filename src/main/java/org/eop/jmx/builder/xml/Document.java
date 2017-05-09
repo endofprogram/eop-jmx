@@ -8,8 +8,8 @@ public class Document extends XNode implements IDocument {
 	private DocType docType;
 	private IElement root;
 	
-	public Document() {
-		super(null, "");
+	public Document(IXNode parent, String name) {
+		super(parent, name);
 	}
 	
 	@Override
@@ -70,7 +70,7 @@ public class Document extends XNode implements IDocument {
 
 	@Override
 	public IXNode deepClone(IXNode parent) {
-		Document document = new Document();
+		Document document = new Document(parent, getName());
 		document.setDeclaration(declaration.deepClone(document));
 		document.setDocType(docType.deepClone(document));
 		document.setRoot((IElement)root.deepClone(document));

@@ -44,7 +44,7 @@ public class XmlBuilder {
 		this.doctQuote = doctQuote;
 		this.attrQuote = attrQuote;
 		this.capacity = capacity;
-		document = new Document();
+		document = new Document(null, "");
 	}
 	
 	public XmlBuilder declaration() {

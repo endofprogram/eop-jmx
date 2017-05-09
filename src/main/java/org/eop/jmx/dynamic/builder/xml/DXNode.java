@@ -1,6 +1,8 @@
 package org.eop.jmx.dynamic.builder.xml;
 
 import org.eop.claw.Claw;
+import org.eop.jmx.builder.xml.IXNode;
+import org.eop.jmx.builder.xml.XNode;
 /**
  * lixinjie 2016-12-26
  */

@@ -45,11 +45,11 @@ public class Element extends CNode implements IElement {
 		return attributes;
 	}
 	
-	QName getQName() {
+	public QName getQName() {
 		return qname;
 	}
 	
-	boolean getSelfClosing() {
+	public boolean getSelfClosing() {
 		return selfClosing;
 	}
 	

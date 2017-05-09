@@ -1,6 +1,12 @@
 package org.eop.jmx.dynamic.builder.xml;
 
 import java.util.List;
+
+import org.eop.jmx.builder.xml.Attribute;
+import org.eop.jmx.builder.xml.Element;
+import org.eop.jmx.builder.xml.ICNode;
+import org.eop.jmx.builder.xml.IXNode;
+import org.eop.jmx.builder.xml.Namespace;
 /**
  * lixinjie 2016-12-26
  */
@@ -8,9 +14,9 @@ public class DElement extends DCNode implements IDElement {
 
 	private Element element;
 	
-	public DElement(IXNode parent, String name, boolean selfClose, String path, String namespace) {
+	public DElement(IXNode parent, String namespace, String name, String path, boolean selfClosing) {
 		super(parent, name, path);
-		this.element = new Element(parent, name, selfClose, namespace);
+		this.element = new Element(parent, namespace, name, selfClosing);
 	}
 
 	@Override
@@ -62,7 +68,7 @@ public class DElement extends DCNode implements IDElement {
 
 	@Override
 	IDCNode cloneDSelf(IXNode parent) {
-		return new DElement(parent, getName(), element.getSelfClose(), getPath(), element.getQName().getPrefix());
+		return new DElement(parent, element.getQName().getPrefix(), getName(), getPath(), element.getSelfClosing());
 	}
 
 }

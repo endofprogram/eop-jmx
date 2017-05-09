@@ -1,4 +1,8 @@
 package org.eop.jmx.dynamic.builder.xml;
+
+import org.eop.jmx.builder.xml.CDatas;
+import org.eop.jmx.builder.xml.IXNode;
+
 /**
  * lixinjie 2016-12-26
  */
@@ -8,10 +12,10 @@ public class DCDatas extends DXNode {
 	private CDatas cdatas;
 	
 	public DCDatas(IXNode parent, String name, String path) {
-		this(parent, name, path, null);
+		this(parent, null, name, path);
 	}
 	
-	public DCDatas(IXNode parent, String name, String path, String namespace) {
+	public DCDatas(IXNode parent, String namespace, String name, String path) {
 		super(parent, name, path);
 		this.namespace = namespace;
 	}
@@ -27,7 +31,7 @@ public class DCDatas extends DXNode {
 	@Override
 	void prepare() {
 		fetchParentClaw();
-		cdatas = new CDatas(this, getName(), getParentClaw().getList(getPath()).toArray(), namespace);
+		cdatas = new CDatas(this, namespace, getName(), getParentClaw().getList(getPath()).toArray());
 	}
 
 	@Override
@@ -44,7 +48,7 @@ public class DCDatas extends DXNode {
 
 	@Override
 	public DCDatas deepClone(IXNode parent) {
-		return new DCDatas(parent, getName(), getPath(), namespace);
+		return new DCDatas(parent, namespace, getName(), getPath());
 	}
 
 }

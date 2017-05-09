@@ -1,4 +1,8 @@
 package org.eop.jmx.dynamic.builder.xml;
+
+import org.eop.jmx.builder.xml.Comment;
+import org.eop.jmx.builder.xml.IXNode;
+
 /**
  * lixinjie 2016-12-26
  */
@@ -7,7 +11,7 @@ public class DComment extends DXNode {
 	private Comment comment;
 	
 	public DComment(IXNode parent, String path) {
-		super(parent, null, path);
+		super(parent, "", path);
 	}
 	
 	Comment getComment() {

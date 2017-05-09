@@ -11,7 +11,7 @@ public class QName extends XNode {
 		this.prefix = prefix;
 	}
 	
-	String getPrefix() {
+	public String getPrefix() {
 		return prefix;
 	}
 	

@@ -4,13 +4,14 @@ import java.util.List;
 
 import org.eop.chassis.util.ListUtil;
 import org.eop.chassis.util.TypeUtil;
+import org.eop.jmx.builder.xml.IXNode;
 /**
  * lixinjie 2016-12-26
  */
 public class DElements extends DElement {
 
-	public DElements(IXNode parent, String name, boolean selfClose, String path, String namespace) {
-		super(parent, name, selfClose, path, namespace);
+	public DElements(IXNode parent, String namespace, String name, String path, boolean selfClosing) {
+		super(parent, namespace, name, path, selfClosing);
 	}
 
 	@Override

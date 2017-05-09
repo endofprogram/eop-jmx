@@ -1,4 +1,8 @@
 package org.eop.jmx.dynamic.builder.xml;
+
+import org.eop.jmx.builder.xml.IXNode;
+import org.eop.jmx.builder.xml.Texts;
+
 /**
  * lixinjie 2016-12-26
  */
@@ -8,10 +12,10 @@ public class DTexts extends DXNode {
 	private Texts texts;
 	
 	public DTexts(IXNode parent, String name, String path) {
-		this(parent, name, path, null);
+		this(parent, null, name, path);
 	}
 	
-	public DTexts(IXNode parent, String name, String path, String namespace) {
+	public DTexts(IXNode parent, String namespace, String name, String path) {
 		super(parent, name, path);
 		this.namespace = namespace;
 	}
@@ -27,7 +31,7 @@ public class DTexts extends DXNode {
 	@Override
 	void prepare() {
 		fetchParentClaw();
-		texts = new Texts(this, getName(), getParentClaw().getList(getPath()).toArray(), namespace);
+		texts = new Texts(this, namespace, getName(), getParentClaw().getList(getPath()).toArray());
 	}
 
 	@Override
@@ -44,7 +48,7 @@ public class DTexts extends DXNode {
 
 	@Override
 	public DTexts deepClone(IXNode parent) {
-		return new DTexts(parent, getName(), getPath(), namespace);
+		return new DTexts(parent, namespace, getName(), getPath());
 	}
 
 }
