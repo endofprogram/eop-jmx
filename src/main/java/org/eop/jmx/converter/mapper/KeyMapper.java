@@ -9,22 +9,33 @@ import java.util.Map;
  */
 public class KeyMapper {
 
-	private Map<String, Mapping> mapper;
+	private Map<String, KeyMapping> mapper;
 	
 	public KeyMapper() {
 		this.mapper = new LinkedHashMap<>();
 	}
 	
-	public void addMapping(String srcKey, String mapKey) {
-		mapper.put(srcKey, new Mapping(srcKey, mapKey));
+	public KeyMapper(Map<String, String> map) {
+		this();
+		initMapper(map);
+	}
+	
+	public void addKeyMapping(String srcKey, String mapKey) {
+		mapper.put(srcKey, new KeyMapping(srcKey, mapKey));
 	}
 	
 	public String getMapKey(String srcKey) {
 		return mapper.get(srcKey).getMapKey();
 	}
 	
-	public Mapping[] getMappings() {
-		Mapping[] mps = new Mapping[mapper.values().size()];
+	public KeyMapping[] getKeyMappings() {
+		KeyMapping[] mps = new KeyMapping[mapper.values().size()];
 		return mapper.values().toArray(mps);
+	}
+	
+	protected void initMapper(Map<String, String> map) {
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			addKeyMapping(entry.getKey(), entry.getValue());
+		}
 	}
 }
