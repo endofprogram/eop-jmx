@@ -1,6 +1,6 @@
 package org.eop.jmx.builder.json
 
-import org.eop.chassis.test.AbstractGroovyTest
+import org.eop.chassis.test.AbstractCommonTest
 import org.eop.claw.Claw
 import org.eop.jmx.builder.JsonBuilder
 import org.eop.jmx.dynamic.builder.JsonDynamicBuilder
@@ -11,7 +11,7 @@ import org.junit.Test
 /**
  * @author lixinjie
  */
-class JsonBuilderTest extends AbstractGroovyTest {
+class JsonBuilderTest extends AbstractCommonTest {
 
 	Claw claw
 	

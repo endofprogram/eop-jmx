@@ -16,6 +16,7 @@ public class ConvertSetting {
 	private ActionWhenNoMapping actionWhenNoMapping;
 	private ActionWhenNullValue actionWhenNullValue;
 	private ValueListToXmlStrategy valueListToXmlStrategy;
+	private EmptyElementConvertStategy emptyElementConvertStategy;
 	
 	public ConvertSetting() {
 		this(new KeyMapper());
@@ -31,6 +32,7 @@ public class ConvertSetting {
 		this.actionWhenNoMapping = ActionWhenNoMapping.UseSrcKey;
 		this.actionWhenNullValue = ActionWhenNullValue.UseNullString;
 		this.valueListToXmlStrategy = ValueListToXmlStrategy.MultipleChildrenWithSameName;
+		this.emptyElementConvertStategy = EmptyElementConvertStategy.EmptyString;
 		initDefaultSetting();
 	}
 	
@@ -72,6 +74,14 @@ public class ConvertSetting {
 
 	public void setValueListToXmlStrategy(ValueListToXmlStrategy valueListToXmlStrategy) {
 		this.valueListToXmlStrategy = valueListToXmlStrategy;
+	}
+
+	public EmptyElementConvertStategy getEmptyElementConvertStategy() {
+		return emptyElementConvertStategy;
+	}
+
+	public void setEmptyElementConvertStategy(EmptyElementConvertStategy emptyElementConvertStategy) {
+		this.emptyElementConvertStategy = emptyElementConvertStategy;
 	}
 
 	protected void initDefaultSetting() {

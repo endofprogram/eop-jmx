@@ -3,6 +3,7 @@ package org.eop.jmx.converter;
 import java.util.List;
 import java.util.Map;
 
+import org.eop.jmx.builder.JsonBuilder;
 import org.eop.jmx.builder.XmlBuilder;
 import org.eop.jmx.converter.exception.ConvertException;
 import org.eop.jmx.converter.setting.ActionWhenNullValue;
@@ -13,6 +14,16 @@ import org.eop.jmx.converter.setting.ValueListToXmlStrategy;
  * lixinjie
  */
 public class MapConverter {
+	
+	public static String toJson(Map<String, Object> map, ConvertSetting convertSetting) {
+		return toJson(map, convertSetting, false);
+	}
+	
+	public static String toJson(Map<String, Object> map, ConvertSetting convertSetting, boolean format) {
+		JsonBuilder jsonBuilder = new JsonBuilder();
+		
+		return jsonBuilder.toJson(format);
+	}
 
 	public static String toXml(Map<String, Object> map, ConvertSetting convertSetting) {
 		return toXml(map, convertSetting, false);
@@ -21,9 +32,65 @@ public class MapConverter {
 	public static String toXml(Map<String, Object> map, ConvertSetting convertSetting, boolean format) {
 		XmlBuilder xmlBuilder = new XmlBuilder();
 		xmlBuilder.rootElement(getMapKey(convertSetting.getSetting("map.root.src.key"), "", convertSetting));
-		convertMap(map, nextLevelPrefix("", convertSetting.getSetting("map.root.src.key")), convertSetting, xmlBuilder);
+		convertMap(map, "", convertSetting, xmlBuilder);
 		xmlBuilder.end();
 		return xmlBuilder.toXml(format);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected static void convertMap(Map<String, Object> map, String prefix, ConvertSetting convertSetting, JsonBuilder jsonBuilder) {
+		for (Map.Entry<String, Object> entry : map.entrySet()) {
+			if (entry.getValue() == null) {
+				convertValue(entry.getKey(), null, prefix, convertSetting, jsonBuilder);
+			} else if (entry.getValue() instanceof Map<?, ?>) {
+				jsonBuilder.fork(getMapKey(entry.getKey(), prefix, convertSetting));
+				convertMap((Map<String, Object>)entry.getValue(), nextLevelPrefix(prefix, entry.getKey()), convertSetting, jsonBuilder);
+				jsonBuilder.end();
+			} else if (entry.getValue() instanceof List<?>) {
+				jsonBuilder.bole(getMapKey(entry.getKey(), prefix, convertSetting));
+				convertList((List<Object>)entry.getValue(), nextLevelPrefix(prefix, entry.getKey()), convertSetting, jsonBuilder);
+				jsonBuilder.end();
+			} else {
+				convertValue(entry.getKey(), entry.getValue(), prefix, convertSetting, jsonBuilder);
+			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected static void convertList(List<Object> list, String prefix, ConvertSetting convertSetting, JsonBuilder jsonBuilder) {
+		if (!list.isEmpty()) {
+			if (list.get(0) instanceof Map<?, ?>) {
+				for (Map<String, Object> map : (List<Map<String, Object>>)(Object)list) {
+					jsonBuilder.bough();
+					convertMap(map, nextLevelPrefix(prefix, convertSetting.getSetting("list.item.src.key")), convertSetting, jsonBuilder);
+					jsonBuilder.end();
+				}
+			} else if (list.get(0) instanceof List<?>) {
+				for (List<Object> ilist : (List<List<Object>>)(Object)list) {
+					jsonBuilder.trunk();
+					convertList(ilist, nextLevelPrefix(prefix, convertSetting.getSetting("list.item.src.key")), convertSetting, jsonBuilder);
+					jsonBuilder.end();
+				}
+			} else {
+				for (Object value : list) {
+					jsonBuilder.bud(value);
+				}
+			}
+		}
+	}
+	
+	protected static void convertValue(String key, Object value, String prefix, ConvertSetting convertSetting, JsonBuilder jsonBuilder) {
+		if (value == null) {
+			if (convertSetting.getActionWhenNullValue() == ActionWhenNullValue.UseNullString) {
+				jsonBuilder.leaf(getMapKey(key, prefix, convertSetting), convertSetting.getSetting("null.string"));
+			} else if (convertSetting.getActionWhenNullValue() == ActionWhenNullValue.ThrowException) {
+				throw new ConvertException("unexpected null value with name '" + prefix + key + "', when convert map to json");
+			} else if (convertSetting.getActionWhenNullValue() == ActionWhenNullValue.ExcludeSilently) {
+				//do nothing
+			}
+		} else {
+			jsonBuilder.leaf(getMapKey(key, prefix, convertSetting), value);
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
