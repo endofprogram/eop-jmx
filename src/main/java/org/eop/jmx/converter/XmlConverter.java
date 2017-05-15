@@ -145,15 +145,5 @@ public class XmlConverter {
 		}
 		return "";
 	}
-	
-	protected static String listToString(List<Object> list, String delimiter) {
-		StringBuilder sb = new StringBuilder();
-		for (Object value : list) {
-			sb.append(value).append(delimiter);
-		}
-		if (sb.length() > 0) {
-			sb.setLength(sb.length() - 1);
-		}
-		return sb.toString();
-	}
+
 }
