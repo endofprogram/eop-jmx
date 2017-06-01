@@ -51,8 +51,9 @@ public class Document extends XNode implements IDocument {
 		if (docType != null) {
 			docType.toXml(sb);
 		}
-		
-		root.toXml(sb);
+		if (root != null) {
+			root.toXml(sb);
+		}
 	}
 
 	@Override
@@ -64,8 +65,9 @@ public class Document extends XNode implements IDocument {
 		if (docType != null) {
 			docType.toXml(sb, indent);
 		}
-		
-		root.toXml(sb, indent);
+		if (root != null) {
+			root.toXml(sb, indent);
+		}
 	}
 
 	@Override
