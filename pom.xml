@@ -21,11 +21,6 @@
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-    	<groupId>org.eop</groupId>
-  		<artifactId>claw</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
     	<groupId>javax.json</groupId>
     	<artifactId>javax.json-api</artifactId>
     	<version>1.0</version>
@@ -61,6 +56,6 @@
       <artifactId>json-lib</artifactId>      
       <version>2.4</version>
       <classifier>jdk15</classifier>      
-    </dependency>  
+    </dependency>
   </dependencies>
 </project>
