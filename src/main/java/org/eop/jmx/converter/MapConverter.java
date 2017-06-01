@@ -21,7 +21,7 @@ public class MapConverter {
 	
 	public static String toJson(Map<String, Object> map, ConvertSetting convertSetting, boolean format) {
 		JsonBuilder jsonBuilder = new JsonBuilder();
-		
+		convertMap(map, "", convertSetting, jsonBuilder);
 		return jsonBuilder.toJson(format);
 	}
 
