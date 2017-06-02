@@ -1,7 +1,8 @@
 package org.eop.jmx.converter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -58,7 +59,7 @@ public class XmlConverter {
 	
 	@SuppressWarnings("unchecked")
 	protected static Map<String, Object> convertMap(org.dom4j.Element element, String prefix, ConvertSetting convertSetting) {
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new LinkedHashMap<>();
 		if (!element.hasContent()) {
 			map.put(getMapKey(element.getName(), prefix, convertSetting), getValueForEmptyElement(convertSetting));
 			return map;
@@ -70,7 +71,13 @@ public class XmlConverter {
 		}
 		for (org.dom4j.Element child : children) {
 			Map<String, Object> cmap = convertMap(child, nextLevelPrefix(prefix, element.getName()), convertSetting);
-			addToParent(map, prefix, child.getName(), cmap, convertSetting);
+			addToParent(map, nextLevelPrefix(prefix, element.getName()), child.getName(), cmap, convertSetting);
+		}
+		Iterator<String> iterator = map.keySet().iterator();
+		while (iterator.hasNext()) {
+			if (iterator.next().endsWith("__value__status")) {
+				iterator.remove();
+			}
 		}
 		if (map.size() < 2) {
 			String onlyKey = getOnlyKey(map.keySet());
@@ -81,7 +88,7 @@ public class XmlConverter {
 	}
 	
 	protected static Map<String, Object> convertMap(org.w3c.dom.Element element, String prefix, ConvertSetting convertSetting) {
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new LinkedHashMap<>();
 		if (!element.hasChildNodes()) {
 			map.put(getMapKey(element.getNodeName(), prefix, convertSetting), getValueForEmptyElement(convertSetting));
 			return map;
@@ -93,7 +100,13 @@ public class XmlConverter {
 		}
 		for (org.w3c.dom.Element child : children) {
 			Map<String, Object> cmap = convertMap(child, nextLevelPrefix(prefix, element.getNodeName()), convertSetting);
-			addToParent(map, prefix, child.getNodeName(), cmap, convertSetting);
+			addToParent(map, nextLevelPrefix(prefix, element.getNodeName()), child.getNodeName(), cmap, convertSetting);
+		}
+		Iterator<String> iterator = map.keySet().iterator();
+		while (iterator.hasNext()) {
+			if (iterator.next().endsWith("__value__status")) {
+				iterator.remove();
+			}
 		}
 		if (map.size() < 2) {
 			String onlyKey = getOnlyKey(map.keySet());
@@ -128,15 +141,18 @@ public class XmlConverter {
 	protected static void addToMap(Map<String, Object> map, String key, Object value) {
 		if (!map.containsKey(key)) {
 			map.put(key, value);
+			map.put(key + "__value__status", "single");
 		} else {
+			String valueStatus = (String)map.get(key + "__value__status");
 			Object oval = map.get(key);
-			if (oval instanceof List<?>) {
+			if ("list".equals(valueStatus)) {
 				((List<Object>)oval).add(value);
-			} else {
+			} else if ("single".equals(valueStatus)) {
 				List<Object> list = new ArrayList<>();
 				list.add(oval);
 				list.add(value);
 				map.put(key, list);
+				map.put(key + "__value__status", "list");
 			}
 		}
 	}

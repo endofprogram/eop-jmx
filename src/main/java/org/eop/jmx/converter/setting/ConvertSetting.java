@@ -26,7 +26,7 @@ public class ConvertSetting {
 		this(new KeyMapper(map));
 	}
 
-	public ConvertSetting(KeyMapper keyMapper) {
+	protected ConvertSetting(KeyMapper keyMapper) {
 		this.settings = new HashMap<>();
 		this.keyMapper = keyMapper;
 		this.actionWhenNoMapping = ActionWhenNoMapping.UseSrcKey;
@@ -34,6 +34,7 @@ public class ConvertSetting {
 		this.valueListToXmlStrategy = ValueListToXmlStrategy.MultipleChildrenWithSameName;
 		this.emptyElementConvertStategy = EmptyElementConvertStategy.EmptyString;
 		initDefaultSetting();
+		initKeyMapper();
 	}
 	
 	public void addSetting(String name, String value) {
@@ -89,5 +90,11 @@ public class ConvertSetting {
 		addSetting("xml.list.split.char", ",");
 		addSetting("list.item.src.key", "itemName");
 		addSetting("map.root.src.key", "rootName");
+		addSetting("mapping.src.key.delimiter", ".");
+	}
+	
+	protected void initKeyMapper() {
+		keyMapper.setActionWhenNoMapping(actionWhenNoMapping);
+		keyMapper.setSrcKeyDelimiter(getSetting("mapping.src.key.delimiter"));
 	}
 }
