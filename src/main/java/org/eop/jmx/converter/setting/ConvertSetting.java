@@ -86,15 +86,18 @@ public class ConvertSetting {
 	}
 
 	protected void initDefaultSetting() {
-		addSetting("null.string", "null");
-		addSetting("xml.list.split.char", ",");
-		addSetting("list.item.src.key", "itemName");
-		addSetting("map.root.src.key", "rootName");
-		addSetting("mapping.src.key.delimiter", ".");
+		addSetting("json.null.string", "null");
+		addSetting("json.list.item.src.key", "__item");
+		addSetting("xml.null.string", "null");
+		addSetting("xml.list.item.delimiter", ",");
+		addSetting("xml.list.src.key", "__list");
+		addSetting("xml.list.item.src.key", "__item");
+		addSetting("xml.root.src.key", "__root");
+		addSetting("key.mapping.src.key.delimiter", ".");
 	}
 	
 	protected void initKeyMapper() {
 		keyMapper.setActionWhenNoMapping(actionWhenNoMapping);
-		keyMapper.setSrcKeyDelimiter(getSetting("mapping.src.key.delimiter"));
+		keyMapper.setSrcKeyDelimiter(getSetting("key.mapping.src.key.delimiter"));
 	}
 }

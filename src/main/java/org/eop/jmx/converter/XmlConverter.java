@@ -33,30 +33,6 @@ public class XmlConverter {
 		}
 	}
 	
-	public static String toJson(org.dom4j.Element element, ConvertSetting convertSetting) {
-		return toJson(element, convertSetting, false);
-	}
-	
-	public static String toJson(org.dom4j.Element element, ConvertSetting convertSetting, boolean format) {
-		try {
-			return MapConverter.toJson(toMap(element, convertSetting), convertSetting, format);
-		} catch (Exception e) {
-			throw new ConvertException("convert xml to json error", e);
-		}
-	}
-	
-	public static String toJson(org.w3c.dom.Element element, ConvertSetting convertSetting) {
-		return toJson(element, convertSetting, false);
-	}
-	
-	public static String toJson(org.w3c.dom.Element element, ConvertSetting convertSetting, boolean format) {
-		try {
-			return MapConverter.toJson(toMap(element, convertSetting), convertSetting, format);
-		} catch (Exception e) {
-			throw new ConvertException("convert xml to json error", e);
-		}
-	}
-	
 	@SuppressWarnings("unchecked")
 	protected static Map<String, Object> convertMap(org.dom4j.Element element, String prefix, ConvertSetting convertSetting) {
 		Map<String, Object> map = new LinkedHashMap<>();
@@ -70,12 +46,12 @@ public class XmlConverter {
 			return map;
 		}
 		for (org.dom4j.Element child : children) {
-			Map<String, Object> cmap = convertMap(child, nextLevelPrefix(prefix, element.getName()), convertSetting);
-			addToParent(map, nextLevelPrefix(prefix, element.getName()), child.getName(), cmap, convertSetting);
+			Map<String, Object> cmap = convertMap(child, nextLevelPrefix(prefix, element.getName(), convertSetting.getSetting("key.mapping.src.key.delimiter")), convertSetting);
+			addToParent(map, nextLevelPrefix(prefix, element.getName(), convertSetting.getSetting("key.mapping.src.key.delimiter")), child.getName(), cmap, convertSetting);
 		}
 		Iterator<String> iterator = map.keySet().iterator();
 		while (iterator.hasNext()) {
-			if (iterator.next().endsWith("__value__status")) {
+			if (iterator.next().endsWith("__status")) {
 				iterator.remove();
 			}
 		}
@@ -99,12 +75,12 @@ public class XmlConverter {
 			return map;
 		}
 		for (org.w3c.dom.Element child : children) {
-			Map<String, Object> cmap = convertMap(child, nextLevelPrefix(prefix, element.getNodeName()), convertSetting);
-			addToParent(map, nextLevelPrefix(prefix, element.getNodeName()), child.getNodeName(), cmap, convertSetting);
+			Map<String, Object> cmap = convertMap(child, nextLevelPrefix(prefix, element.getNodeName(), convertSetting.getSetting("key.mapping.src.key.delimiter")), convertSetting);
+			addToParent(map, nextLevelPrefix(prefix, element.getNodeName(), convertSetting.getSetting("key.mapping.src.key.delimiter")), child.getNodeName(), cmap, convertSetting);
 		}
 		Iterator<String> iterator = map.keySet().iterator();
 		while (iterator.hasNext()) {
-			if (iterator.next().endsWith("__value__status")) {
+			if (iterator.next().endsWith("__status")) {
 				iterator.remove();
 			}
 		}
@@ -141,9 +117,9 @@ public class XmlConverter {
 	protected static void addToMap(Map<String, Object> map, String key, Object value) {
 		if (!map.containsKey(key)) {
 			map.put(key, value);
-			map.put(key + "__value__status", "single");
+			map.put(key + "__status", "single");
 		} else {
-			String valueStatus = (String)map.get(key + "__value__status");
+			String valueStatus = (String)map.get(key + "__status");
 			Object oval = map.get(key);
 			if ("list".equals(valueStatus)) {
 				((List<Object>)oval).add(value);
@@ -152,7 +128,7 @@ public class XmlConverter {
 				list.add(oval);
 				list.add(value);
 				map.put(key, list);
-				map.put(key + "__value__status", "list");
+				map.put(key + "__status", "list");
 			}
 		}
 	}
@@ -165,8 +141,8 @@ public class XmlConverter {
 		return convertSetting.getKeyMapper().getMapKey(prefix + key);
 	}
 	
-	protected static String nextLevelPrefix(String prefix, String key) {
-		return prefix + key + ".";
+	protected static String nextLevelPrefix(String prefix, String key, String delimiter) {
+		return prefix + key + delimiter;
 	}
 	
 	protected static Object getValueForEmptyElement(ConvertSetting convertSetting) {

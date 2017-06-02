@@ -36,9 +36,8 @@ public class MapConverter {
 	public static String toXml(Map<String, Object> map, ConvertSetting convertSetting, boolean format) {
 		try {
 			XmlBuilder xmlBuilder = new XmlBuilder();
-			xmlBuilder.rootElement(getMapKey(convertSetting.getSetting("map.root.src.key"), "", convertSetting));
+			xmlBuilder.rootElement(getMapKey(convertSetting.getSetting("xml.root.src.key"), "", convertSetting));
 			convertMap(map, "", convertSetting, xmlBuilder);
-			xmlBuilder.end();
 			return xmlBuilder.toXml(format);
 		} catch (Exception e) {
 			throw new ConvertException("convert map to xml error", e);
@@ -52,11 +51,11 @@ public class MapConverter {
 				convertValue(entry.getKey(), null, prefix, convertSetting, jsonBuilder);
 			} else if (entry.getValue() instanceof Map<?, ?>) {
 				jsonBuilder.fork(getMapKey(entry.getKey(), prefix, convertSetting));
-				convertMap((Map<String, Object>)entry.getValue(), nextLevelPrefix(prefix, entry.getKey()), convertSetting, jsonBuilder);
+				convertMap((Map<String, Object>)entry.getValue(), nextLevelPrefix(prefix, entry.getKey(), convertSetting.getSetting("key.mapping.src.key.delimiter")), convertSetting, jsonBuilder);
 				jsonBuilder.end();
 			} else if (entry.getValue() instanceof List<?>) {
 				jsonBuilder.bole(getMapKey(entry.getKey(), prefix, convertSetting));
-				convertList((List<Object>)entry.getValue(), nextLevelPrefix(prefix, entry.getKey()), convertSetting, jsonBuilder);
+				convertList((List<Object>)entry.getValue(), nextLevelPrefix(prefix, entry.getKey(), convertSetting.getSetting("key.mapping.src.key.delimiter")), convertSetting, jsonBuilder);
 				jsonBuilder.end();
 			} else {
 				convertValue(entry.getKey(), entry.getValue(), prefix, convertSetting, jsonBuilder);
@@ -70,13 +69,13 @@ public class MapConverter {
 			if (list.get(0) instanceof Map<?, ?>) {
 				for (Map<String, Object> map : (List<Map<String, Object>>)(Object)list) {
 					jsonBuilder.bough();
-					convertMap(map, nextLevelPrefix(prefix, convertSetting.getSetting("list.item.src.key")), convertSetting, jsonBuilder);
+					convertMap(map, nextLevelPrefix(prefix, convertSetting.getSetting("json.list.item.src.key"), convertSetting.getSetting("key.mapping.src.key.delimiter")), convertSetting, jsonBuilder);
 					jsonBuilder.end();
 				}
 			} else if (list.get(0) instanceof List<?>) {
 				for (List<Object> ilist : (List<List<Object>>)(Object)list) {
 					jsonBuilder.trunk();
-					convertList(ilist, nextLevelPrefix(prefix, convertSetting.getSetting("list.item.src.key")), convertSetting, jsonBuilder);
+					convertList(ilist, nextLevelPrefix(prefix, convertSetting.getSetting("json.list.item.src.key"), convertSetting.getSetting("key.mapping.src.key.delimiter")), convertSetting, jsonBuilder);
 					jsonBuilder.end();
 				}
 			} else {
@@ -90,7 +89,7 @@ public class MapConverter {
 	protected static void convertValue(String key, Object value, String prefix, ConvertSetting convertSetting, JsonBuilder jsonBuilder) {
 		if (value == null) {
 			if (convertSetting.getActionWhenNullValue() == ActionWhenNullValue.UseNullString) {
-				jsonBuilder.leaf(getMapKey(key, prefix, convertSetting), convertSetting.getSetting("null.string"));
+				jsonBuilder.leaf(getMapKey(key, prefix, convertSetting), convertSetting.getSetting("json.null.string"));
 			} else if (convertSetting.getActionWhenNullValue() == ActionWhenNullValue.ThrowException) {
 				throw new ConvertException("unexpected null value with name '" + prefix + key + "', when convert map to json");
 			} else if (convertSetting.getActionWhenNullValue() == ActionWhenNullValue.ExcludeSilently) {
@@ -108,12 +107,17 @@ public class MapConverter {
 				convertValue(entry.getKey(), null, prefix, convertSetting, xmlBuilder);
 			} else if (entry.getValue() instanceof Map<?, ?>) {
 				xmlBuilder.element(getMapKey(entry.getKey(), prefix, convertSetting));
-				convertMap((Map<String, Object>)entry.getValue(), nextLevelPrefix(prefix, entry.getKey()), convertSetting, xmlBuilder);
+				convertMap((Map<String, Object>)entry.getValue(), nextLevelPrefix(prefix, entry.getKey(), convertSetting.getSetting("key.mapping.src.key.delimiter")), convertSetting, xmlBuilder);
 				xmlBuilder.end();
 			} else if (entry.getValue() instanceof List<?>) {
-				xmlBuilder.element(getMapKey(entry.getKey(), prefix, convertSetting));
-				convertList((List<Object>)entry.getValue(), nextLevelPrefix(prefix, entry.getKey()), convertSetting, xmlBuilder);
-				xmlBuilder.end();
+				String mapKey = getMapKey(entry.getKey(), prefix, convertSetting);
+				if (!convertSetting.getSetting("xml.list.src.key").equals(mapKey)) {
+					xmlBuilder.element(mapKey);
+				}
+				convertList((List<Object>)entry.getValue(), nextLevelPrefix(prefix, entry.getKey(), convertSetting.getSetting("key.mapping.src.key.delimiter")), convertSetting, xmlBuilder);
+				if (!convertSetting.getSetting("xml.list.src.key").equals(mapKey)) {
+					xmlBuilder.end();
+				}
 			} else {
 				xmlBuilder.element(getMapKey(entry.getKey(), prefix, convertSetting));
 				convertValue(entry.getKey(), entry.getValue(), prefix, convertSetting, xmlBuilder);
@@ -127,25 +131,25 @@ public class MapConverter {
 		if (!list.isEmpty()) {
 			if (list.get(0) instanceof Map<?, ?>) {
 				for (Map<String, Object> map : (List<Map<String, Object>>)(Object)list) {
-					xmlBuilder.element(getMapKey(convertSetting.getSetting("list.item.src.key"), prefix, convertSetting));
-					convertMap(map, nextLevelPrefix(prefix, convertSetting.getSetting("list.item.src.key")), convertSetting, xmlBuilder);
+					xmlBuilder.element(getMapKey(convertSetting.getSetting("xml.list.item.src.key"), prefix, convertSetting));
+					convertMap(map, nextLevelPrefix(prefix, convertSetting.getSetting("xml.list.item.src.key"), convertSetting.getSetting("key.mapping.src.key.delimiter")), convertSetting, xmlBuilder);
 					xmlBuilder.end();
 				}
 			} else if (list.get(0) instanceof List<?>) {
 				for (List<Object> ilist : (List<List<Object>>)(Object)list) {
-					xmlBuilder.element(getMapKey(convertSetting.getSetting("list.item.src.key"), prefix, convertSetting));
-					convertList(ilist, nextLevelPrefix(prefix, convertSetting.getSetting("list.item.src.key")), convertSetting, xmlBuilder);
+					xmlBuilder.element(getMapKey(convertSetting.getSetting("xml.list.item.src.key"), prefix, convertSetting));
+					convertList(ilist, nextLevelPrefix(prefix, convertSetting.getSetting("xml.list.item.src.key"), convertSetting.getSetting("key.mapping.src.key.delimiter")), convertSetting, xmlBuilder);
 					xmlBuilder.end();
 				}
 			} else {
 				if (convertSetting.getValueListToXmlStrategy() == ValueListToXmlStrategy.MultipleChildrenWithSameName) {
 					for (Object value : list) {
-						xmlBuilder.element(getMapKey(convertSetting.getSetting("list.item.src.key"), prefix, convertSetting));
-						convertValue(convertSetting.getSetting("list.item.src.key"), value, prefix, convertSetting, xmlBuilder);
+						xmlBuilder.element(getMapKey(convertSetting.getSetting("xml.list.item.src.key"), prefix, convertSetting));
+						convertValue(convertSetting.getSetting("xml.list.item.src.key"), value, prefix, convertSetting, xmlBuilder);
 						xmlBuilder.end();
 					}
 				} else if (convertSetting.getValueListToXmlStrategy() == ValueListToXmlStrategy.SingleChildWithSplittedText) {
-					convertValue(convertSetting.getSetting("list.item.src.key"), listToString(list, convertSetting.getSetting("xml.list.split.char")), prefix, convertSetting, xmlBuilder);
+					convertValue(convertSetting.getSetting("xml.list.item.src.key"), listToString(list, convertSetting.getSetting("xml.list.item.delimiter")), prefix, convertSetting, xmlBuilder);
 				}
 			}
 		}
@@ -154,7 +158,7 @@ public class MapConverter {
 	protected static void convertValue(String key, Object value, String prefix, ConvertSetting convertSetting, XmlBuilder xmlBuilder) {
 		if (value == null) {
 			if (convertSetting.getActionWhenNullValue() == ActionWhenNullValue.UseNullString) {
-				xmlBuilder.text(convertSetting.getSetting("null.string"));
+				xmlBuilder.text(convertSetting.getSetting("xml.null.string"));
 			} else if (convertSetting.getActionWhenNullValue() == ActionWhenNullValue.ThrowException) {
 				throw new ConvertException("unexpected null value with name '" + prefix + key + "', when convert map to xml");
 			} else if (convertSetting.getActionWhenNullValue() == ActionWhenNullValue.ExcludeSilently) {
@@ -169,8 +173,8 @@ public class MapConverter {
 		return convertSetting.getKeyMapper().getMapKey(prefix + key);
 	}
 	
-	protected static String nextLevelPrefix(String prefix, String key) {
-		return prefix + key + ".";
+	protected static String nextLevelPrefix(String prefix, String key, String delimiter) {
+		return prefix + key + delimiter;
 	}
 	
 	protected static String listToString(List<Object> list, String delimiter) {
