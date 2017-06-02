@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eop.jmx.converter.exception.ConvertException;
 import org.eop.jmx.converter.setting.ConvertSetting;
 import org.eop.jmx.converter.setting.EmptyElementConvertStategy;
 import org.w3c.dom.NodeList;
@@ -16,11 +17,19 @@ import org.w3c.dom.NodeList;
 public class XmlConverter {
 
 	public static Map<String, Object> toMap(org.dom4j.Element element, ConvertSetting convertSetting) {
-		return convertMap(element, "", convertSetting);
+		try {
+			return convertMap(element, "", convertSetting);
+		} catch (Exception e) {
+			throw new ConvertException("convert xml to map error", e);
+		}
 	}
 	
 	public static Map<String, Object> toMap(org.w3c.dom.Element element, ConvertSetting convertSetting) {
-		return convertMap(element, "", convertSetting);
+		try {
+			return convertMap(element, "", convertSetting);
+		} catch (Exception e) {
+			throw new ConvertException("convert xml to map error", e);
+		}
 	}
 	
 	public static String toJson(org.dom4j.Element element, ConvertSetting convertSetting) {
@@ -28,7 +37,11 @@ public class XmlConverter {
 	}
 	
 	public static String toJson(org.dom4j.Element element, ConvertSetting convertSetting, boolean format) {
-		return MapConverter.toJson(toMap(element, convertSetting), convertSetting, format);
+		try {
+			return MapConverter.toJson(toMap(element, convertSetting), convertSetting, format);
+		} catch (Exception e) {
+			throw new ConvertException("convert xml to json error", e);
+		}
 	}
 	
 	public static String toJson(org.w3c.dom.Element element, ConvertSetting convertSetting) {
@@ -36,7 +49,11 @@ public class XmlConverter {
 	}
 	
 	public static String toJson(org.w3c.dom.Element element, ConvertSetting convertSetting, boolean format) {
-		return MapConverter.toJson(toMap(element, convertSetting), convertSetting, format);
+		try {
+			return MapConverter.toJson(toMap(element, convertSetting), convertSetting, format);
+		} catch (Exception e) {
+			throw new ConvertException("convert xml to json error", e);
+		}
 	}
 	
 	@SuppressWarnings("unchecked")

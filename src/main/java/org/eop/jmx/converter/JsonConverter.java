@@ -1,5 +1,6 @@
 package org.eop.jmx.converter;
 
+import org.eop.jmx.converter.exception.ConvertException;
 import org.eop.jmx.converter.setting.ConvertSetting;
 
 /**
@@ -12,7 +13,11 @@ public class JsonConverter {
 	}
 
 	public static String toXml(com.alibaba.fastjson.JSONObject json, ConvertSetting convertSetting, boolean format) {
-		return MapConverter.toXml(json, convertSetting, format);
+		try {
+			return MapConverter.toXml(json, convertSetting, format);
+		} catch (Exception e) {
+			throw new ConvertException("convert json to xml error", e);
+		}
 	}
 	
 	public static String toXml(net.sf.json.JSONObject json, ConvertSetting convertSetting) {
@@ -21,6 +26,10 @@ public class JsonConverter {
 	
 	@SuppressWarnings("unchecked")
 	public static String toXml(net.sf.json.JSONObject json, ConvertSetting convertSetting, boolean format) {
-		return MapConverter.toXml(json, convertSetting, format);
+		try {
+			return MapConverter.toXml(json, convertSetting, format);
+		} catch (Exception e) {
+			throw new ConvertException("convert json to xml error", e);
+		}
 	}
 }

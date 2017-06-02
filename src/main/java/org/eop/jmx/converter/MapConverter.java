@@ -20,9 +20,13 @@ public class MapConverter {
 	}
 	
 	public static String toJson(Map<String, Object> map, ConvertSetting convertSetting, boolean format) {
-		JsonBuilder jsonBuilder = new JsonBuilder();
-		convertMap(map, "", convertSetting, jsonBuilder);
-		return jsonBuilder.toJson(format);
+		try {
+			JsonBuilder jsonBuilder = new JsonBuilder();
+			convertMap(map, "", convertSetting, jsonBuilder);
+			return jsonBuilder.toJson(format);
+		} catch (Exception e) {
+			throw new ConvertException("convert map to json error", e);
+		}
 	}
 
 	public static String toXml(Map<String, Object> map, ConvertSetting convertSetting) {
@@ -30,11 +34,15 @@ public class MapConverter {
 	}
 	
 	public static String toXml(Map<String, Object> map, ConvertSetting convertSetting, boolean format) {
-		XmlBuilder xmlBuilder = new XmlBuilder();
-		xmlBuilder.rootElement(getMapKey(convertSetting.getSetting("map.root.src.key"), "", convertSetting));
-		convertMap(map, "", convertSetting, xmlBuilder);
-		xmlBuilder.end();
-		return xmlBuilder.toXml(format);
+		try {
+			XmlBuilder xmlBuilder = new XmlBuilder();
+			xmlBuilder.rootElement(getMapKey(convertSetting.getSetting("map.root.src.key"), "", convertSetting));
+			convertMap(map, "", convertSetting, xmlBuilder);
+			xmlBuilder.end();
+			return xmlBuilder.toXml(format);
+		} catch (Exception e) {
+			throw new ConvertException("convert map to xml error", e);
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
