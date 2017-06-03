@@ -22,9 +22,8 @@ class MapConverterTest02 extends AbstractCommonTest {
 <b>b</b>
 <c>c</c>
 </a>'''
-		String json = '{"c":["c","c"],"b":"b"}'
-		ConvertSetting cs = new ConvertSetting(['__root':'a', 'c':'__list', 'c.__item':'c'])
-		Assert.assertEquals('<a><c>c</c><c>c</c><b>b</b></a>', MapConverter.toXml(org.eop.jmx.parser.JsonParser.parseNetsfJson(json), cs))
+		ConvertSetting cs = new ConvertSetting()
+		Assert.assertEquals('{"c":["c","c"],"b":"b"}', MapConverter.toJson(XmlConverter.toMap(org.eop.jmx.parser.XmlParser.parseDom4jXml(xml), cs), cs))
 	}
 	
 	@Test
@@ -35,9 +34,8 @@ class MapConverterTest02 extends AbstractCommonTest {
 <c>c</c>
 <c>c</c>
 </a>'''
-		String json = '{"a":["c","c","c"]}'
-		ConvertSetting cs = new ConvertSetting(['__root':'a', 'a':'__list', 'a.__item':'c'])
-		Assert.assertEquals('<a><c>c</c><c>c</c><c>c</c></a>', MapConverter.toXml(org.eop.jmx.parser.JsonParser.parseNetsfJson(json), cs))
+		ConvertSetting cs = new ConvertSetting()
+		Assert.assertEquals('{"a":["c","c","c"]}', MapConverter.toJson(XmlConverter.toMap(org.eop.jmx.parser.XmlParser.parseDom4jXml(xml), cs), cs))
 	}
 	
 	@Test
@@ -60,9 +58,8 @@ class MapConverterTest02 extends AbstractCommonTest {
 <f>f</f>
 </c>
 </a>'''
-		String json = '{"a":[["d","d","d"],["e","e","e"],["f","f","f"]]}'
-		ConvertSetting cs = new ConvertSetting(['__root':'a', 'a':'__list', 'a.__item':'c', 'a.__item.__item':'d'])
-		Assert.assertEquals('<a><c><d>d</d><d>d</d><d>d</d></c><c><d>e</d><d>e</d><d>e</d></c><c><d>f</d><d>f</d><d>f</d></c></a>', MapConverter.toXml(org.eop.jmx.parser.JsonParser.parseNetsfJson(json), cs))
+		ConvertSetting cs = new ConvertSetting()
+		Assert.assertEquals('{"a":[["d","d","d"],["e","e","e"],["f","f","f"]]}', MapConverter.toJson(XmlConverter.toMap(org.eop.jmx.parser.XmlParser.parseDom4jXml(xml), cs), cs))
 	}
 	
 	@Test
@@ -121,28 +118,25 @@ class MapConverterTest02 extends AbstractCommonTest {
 </f>
 </c>
 </a>'''
-		String json = '{"a":[[["g","g","g"],["h","h","h"],["g","g","g"]],[["h","h","h"],["g","g","g"],["h","h","h"]],[["g","g","g"],["h","h","h"],["g","g","g"]]]}'
-		ConvertSetting cs = new ConvertSetting(['__root':'a', 'a':'__list', 'a.__item':'c', 'a.__item.__item':'d', 'a.__item.__item.__item':'g'])
-		Assert.assertEquals('<a><c><d><g>g</g><g>g</g><g>g</g></d><d><g>h</g><g>h</g><g>h</g></d><d><g>g</g><g>g</g><g>g</g></d></c><c><d><g>h</g><g>h</g><g>h</g></d><d><g>g</g><g>g</g><g>g</g></d><d><g>h</g><g>h</g><g>h</g></d></c><c><d><g>g</g><g>g</g><g>g</g></d><d><g>h</g><g>h</g><g>h</g></d><d><g>g</g><g>g</g><g>g</g></d></c></a>', MapConverter.toXml(org.eop.jmx.parser.JsonParser.parseNetsfJson(json), cs))
+		ConvertSetting cs = new ConvertSetting()
+		Assert.assertEquals('{"a":[[["g","g","g"],["h","h","h"],["g","g","g"]],[["h","h","h"],["g","g","g"],["h","h","h"]],[["g","g","g"],["h","h","h"],["g","g","g"]]]}', MapConverter.toJson(XmlConverter.toMap(org.eop.jmx.parser.XmlParser.parseDom4jXml(xml), cs), cs))
 	}
 	
 	@Test
 	void test05() {
 		String xml = '''\
 <a></a>'''
-		String json = '{"a":""}'
-		ConvertSetting cs = new ConvertSetting(['__root':'a'])
-		Assert.assertEquals('<a><a></a></a>', MapConverter.toXml(org.eop.jmx.parser.JsonParser.parseNetsfJson(json), cs))
+		ConvertSetting cs = new ConvertSetting()
+		Assert.assertEquals('{"a":""}', MapConverter.toJson(XmlConverter.toMap(org.eop.jmx.parser.XmlParser.parseDom4jXml(xml), cs), cs))
 	}
 	
 	@Test
 	void test06() {
 		String xml = '''\
 <a></a>'''
-		String json = '{"a":[]}'
-		ConvertSetting cs = new ConvertSetting(['__root':'a'])
+		ConvertSetting cs = new ConvertSetting()
 		cs.setEmptyElementConvertStategy(EmptyElementConvertStategy.EmptyList)
-		Assert.assertEquals('<a><a></a></a>', MapConverter.toXml(org.eop.jmx.parser.JsonParser.parseNetsfJson(json), cs))
+		Assert.assertEquals('{"a":[]}', MapConverter.toJson(XmlConverter.toMap(org.eop.jmx.parser.XmlParser.parseDom4jXml(xml), cs), cs))
 	}
 	
 	@Test
@@ -153,9 +147,8 @@ class MapConverterTest02 extends AbstractCommonTest {
 <c></c>
 <c></c>
 </a>'''
-		String json = '{"b":"","c":["",""]}'
-		ConvertSetting cs = new ConvertSetting(['__root':'a', 'c':'__list', 'c.__item':'c'])
-		Assert.assertEquals('<a><b></b><c></c><c></c></a>', MapConverter.toXml(org.eop.jmx.parser.JsonParser.parseNetsfJson(json), cs))
+		ConvertSetting cs = new ConvertSetting()
+		Assert.assertEquals('{"b":"","c":["",""]}', MapConverter.toJson(XmlConverter.toMap(org.eop.jmx.parser.XmlParser.parseDom4jXml(xml), cs), cs))
 	}
 	
 	@Test
@@ -166,10 +159,9 @@ class MapConverterTest02 extends AbstractCommonTest {
 <c></c>
 <c></c>
 </a>'''
-		String json = '{"b":[],"c":[[],[]]}'
-		ConvertSetting cs = new ConvertSetting(['__root':'a', 'c':'__list', 'c.__item':'c'])
+		ConvertSetting cs = new ConvertSetting()
 		cs.setEmptyElementConvertStategy(EmptyElementConvertStategy.EmptyList)
-		Assert.assertEquals('<a><b></b><c></c><c></c></a>', MapConverter.toXml(org.eop.jmx.parser.JsonParser.parseNetsfJson(json), cs))
+		Assert.assertEquals('{"b":[],"c":[[],[]]}', MapConverter.toJson(XmlConverter.toMap(org.eop.jmx.parser.XmlParser.parseDom4jXml(xml), cs), cs))
 	}
 	
 	@Test
@@ -180,11 +172,10 @@ class MapConverterTest02 extends AbstractCommonTest {
 <c>c</c>
 <c>c</c>
 </a>'''
-		String json = '{"B":"b","C":["c","c"]}'
-		ConvertSetting cs = new ConvertSetting(['__root':'a', 'B':'b', 'C':'__list', 'C.__item':'c'])
-		Assert.assertEquals('<a><b>b</b><c>c</c><c>c</c></a>', MapConverter.toXml(org.eop.jmx.parser.JsonParser.parseNetsfJson(json), cs))
+		ConvertSetting cs = new ConvertSetting(['a':'A', 'a.b':'B', 'a.c':'C'])
+		Assert.assertEquals('{"B":"b","C":["c","c"]}', MapConverter.toJson(XmlConverter.toMap(org.eop.jmx.parser.XmlParser.parseDom4jXml(xml), cs), cs))
 	}
-	/*
+	
 	@Test
 	void test10() {
 		String xml = '''\
@@ -211,7 +202,7 @@ class MapConverterTest02 extends AbstractCommonTest {
 </c>
 </a>'''
 		ConvertSetting cs = new ConvertSetting(['a':'A', 'a.b':'B', 'a.b.d':'D1', 'a.b.d.d':'D1D', 'a.b.d.e':'D1E', 'a.b.e':'E1', 'a.b.e.d':'E1D', 'a.b.e.e':'E1E', 'a.c':'C'])
-		Assert.assertEquals('{"B":{"D1":{"D1D":"d","D1E":"e"},"E1":{"E1D":"d","E1E":"e"}},"C":{"d":{"d":"d","e":"e"},"e":{"d":"d","e":"e"}}}', MapConverter.toXml(org.eop.jmx.parser.JsonParser.parseNetsfJson(xml), cs))
+		Assert.assertEquals('{"B":{"D1":{"D1D":"d","D1E":"e"},"E1":{"E1D":"d","E1E":"e"}},"C":{"d":{"d":"d","e":"e"},"e":{"d":"d","e":"e"}}}', MapConverter.toJson(XmlConverter.toMap(org.eop.jmx.parser.XmlParser.parseDom4jXml(xml), cs), cs))
 	}
 	
 	@Test
@@ -222,7 +213,7 @@ class MapConverterTest02 extends AbstractCommonTest {
 <b>b</b>
 </a>'''
 		ConvertSetting cs = new ConvertSetting(['a':'A', 'a.b':'B', 'a.c':'C'])
-		Assert.assertEquals('{"A":["b","b"]}', MapConverter.toXml(org.eop.jmx.parser.JsonParser.parseNetsfJson(xml), cs))
+		Assert.assertEquals('{"A":["b","b"]}', MapConverter.toJson(XmlConverter.toMap(org.eop.jmx.parser.XmlParser.parseDom4jXml(xml), cs), cs))
 	}
 	
 	@Test
@@ -243,7 +234,7 @@ class MapConverterTest02 extends AbstractCommonTest {
 </d>
 </a>'''
 		ConvertSetting cs = new ConvertSetting()
-		Assert.assertEquals('{"b":"b","c":"c","d":[{"f":"f","g":"g"},{"f":"f","g":"g"}]}', MapConverter.toXml(org.eop.jmx.parser.JsonParser.parseNetsfJson(xml), cs))
+		Assert.assertEquals('{"b":"b","c":"c","d":[{"f":"f","g":"g"},{"f":"f","g":"g"}]}', MapConverter.toJson(XmlConverter.toMap(org.eop.jmx.parser.XmlParser.parseDom4jXml(xml), cs), cs))
 	}
 	
 	@Test
@@ -278,7 +269,7 @@ class MapConverterTest02 extends AbstractCommonTest {
 </h>
 </a>'''
 		ConvertSetting cs = new ConvertSetting()
-		Assert.assertEquals('{"b":"b","c":"c","d":{"b":"b","c":"c","e":[{"f":"f","g":"g"},{"f":"f","g":"g"}]},"h":{"b":"b","c":"c","e":[{"f":"f","g":"g"},{"f":"f","g":"g"}]}}', MapConverter.toXml(org.eop.jmx.parser.JsonParser.parseNetsfJson(xml), cs))
+		Assert.assertEquals('{"b":"b","c":"c","d":{"b":"b","c":"c","e":[{"f":"f","g":"g"},{"f":"f","g":"g"}]},"h":{"b":"b","c":"c","e":[{"f":"f","g":"g"},{"f":"f","g":"g"}]}}', MapConverter.toJson(XmlConverter.toMap(org.eop.jmx.parser.XmlParser.parseDom4jXml(xml), cs), cs))
 	}
 	
 	@Test
@@ -325,6 +316,6 @@ class MapConverterTest02 extends AbstractCommonTest {
 </h>
 </a>'''
 		ConvertSetting cs = new ConvertSetting()
-		Assert.assertEquals('{"b":"b","c":"c","x":["x","x"],"d":{"b":"b","c":"c","xs":["x","x"],"es":[{"f":"f","g":"g"},{"f":"f","g":"g"}]},"h":{"b":"b","c":"c","x":["x","x"],"es":[{"f":"f","g":"g"},{"f":"f","g":"g"}]}}', MapConverter.toXml(org.eop.jmx.parser.JsonParser.parseNetsfJson(xml), cs))
-	}*/
+		Assert.assertEquals('{"b":"b","c":"c","x":["x","x"],"d":{"b":"b","c":"c","xs":["x","x"],"es":[{"f":"f","g":"g"},{"f":"f","g":"g"}]},"h":{"b":"b","c":"c","x":["x","x"],"es":[{"f":"f","g":"g"},{"f":"f","g":"g"}]}}', MapConverter.toJson(XmlConverter.toMap(org.eop.jmx.parser.XmlParser.parseDom4jXml(xml), cs), cs))
+	}
 }
