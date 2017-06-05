@@ -15,7 +15,7 @@ import org.junit.runners.Suite.SuiteClasses;
  * @since 2017-06-03
  */
 @RunWith(Suite.class)
-@SuiteClasses({MapConverterTest01.class, MapConverterTest02.class, MapConverterTest03.class, MapConverterTest04.class, XmlConverterTest01.class, XmlConverterTest02.class})
+@SuiteClasses([MapConverterTest01.class, MapConverterTest02.class, MapConverterTest03.class, MapConverterTest04.class, XmlConverterTest01.class, XmlConverterTest02.class])
 public class ConverterTestSuite {
 	
 }

@@ -12,7 +12,7 @@ import org.junit.runners.Suite.SuiteClasses;
  * @since 2017-06-03
  */
 @RunWith(Suite.class)
-@SuiteClasses({JsonBuilderTest.class, MapBuilderTest.class, XmlBuilderTest.class})
-public class BuilderTestSuite {
+@SuiteClasses([JsonBuilderTest.class, MapBuilderTest.class, XmlBuilderTest.class])
+class BuilderTestSuite {
 	
 }
